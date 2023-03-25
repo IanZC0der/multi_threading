@@ -7,25 +7,10 @@ static int size = 0;
 static int isVerbose = 0;
 
 
-/*
-int createMask(void) {	
-	int mask = 0;
-	for(int i = 0; i <= BITS_SIZE - 1; i += 2)
-		mask |= (1 << i);
-	return ~mask;
-}
-*/
-
 BitBlock_t *allocBitsList(void) {
 	BitBlock_t *aList;
 	size = upperLimit/BITS_SIZE + 1;
 	aList = malloc(size * sizeof(BitBlock_t));
-	/*
-	for(int i = 0; i < size; ++i) {
-		aList[i] = malloc(sizeof(BitBlock_t));
-	}
-	*/
-
 	return aList;
 }
 
@@ -34,10 +19,6 @@ void init(BitBlock_t *list) {
 		list[i].bits = ~0;
 		pthread_mutex_init(&list[i].mutex, NULL);
 	}
-	/*
-	list[0]->bits &= ~2;
-	list[0]->bits |= (1 << 2);
-	*/
 }
 
 void freeList(BitBlock_t *list) {
