@@ -43,7 +43,7 @@ void init(BitBlock_t *list) {
 void freeList(BitBlock_t *list) {
 	for(int i = 0; i < size; i++) {
 		pthread_mutex_destroy(&list[i].mutex);
-	}
+	}// free the mutex lock
 	free(list);
 }
 
@@ -64,30 +64,22 @@ void printToFileOrScreen(BitBlock_t *list) {
 		if((list[i/BITS_SIZE].bits >> (i % BITS_SIZE)) & 1)
 				fprintf(op, "%d\n", i);
 	}
-	fclose(op);
+	fclose(op);//print to a txt file
 	*/
 	printf("%d\n", 2);
 	for(int i = 3; i < upperLimit; i += 2) {
 		if((list[i/BITS_SIZE].bits >> (i % BITS_SIZE)) & 1)
 				printf("%d\n", i);
-	}
+	} //loop through all the odd numbers. Even numbers are excluded as by no means they can be prime numbers except 2
 }
 
 void *setBit(void *) {
-	/*
-	for(int i = flippingStart * 3; i <= upperLimit; i += flippingStart + flippingStart) {
-		pthread_mutex_lock(&(bitsList[i/BITS_SIZE]->mutex));
-		int bitIndex = i % BITS_SIZE;
-		bitsList[i/BITS_SIZE]->bits &= ~(1 << bitIndex);
-		pthread_mutex_unlock(&(bitsList[i/BITS_SIZE]->mutex));
-	}
-	*/
 	for(int i = nextCandidate(); i <= sqrt(upperLimit); i = nextCandidate()) {
 		for(int j = i * i; j < upperLimit; j += i){
 			if(j % 2 == 0)
-				continue;
+				continue; // ignore the even numbers
 			pthread_mutex_lock(&bitsList[j/BITS_SIZE].mutex);
-			bitsList[j/BITS_SIZE].bits &= ~(1 << (j % BITS_SIZE));
+			bitsList[j/BITS_SIZE].bits &= ~(1 << (j % BITS_SIZE)); // set composite bits to 0
 			pthread_mutex_unlock(&bitsList[j/BITS_SIZE].mutex);
 		}
 	}
@@ -98,22 +90,6 @@ int nextCandidate(void) {
 	static int nextBit = 3;
 	static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 	int currBit = 0;
-	/*
-	for(;;) {
-		pthread_mutex_lock(&(bitsList[nextBit/BITS_SIZE]->mutex));
-		int bitIndex= nextBit % BITS_SIZE;
-		if(((1 << bitIndex) & bitsList[nextBit/BITS_SIZE]->bits) >> bitsIndex) {
-			currBit = nextBit ++;
-			pthread_mutex_unlock(&(bitsList[nextBit/BITS_SIZE]->mutex));
-			break;
-		}
-		else{
-			nextBit ++;
-		}
-		pthread_mutex_unlock(&(bitsList[nextBit/BITS_SIZE]->mutex));
-
-	}
-	*/
 	pthread_mutex_lock(&lock);
 	currBit = nextBit;
 	nextBit += 2;
