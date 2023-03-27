@@ -1,4 +1,4 @@
-# multi_threading
+# Multithreaded Sieve of Eratosthenes
 
 ## Topics
 - Multithreading in C
@@ -28,3 +28,7 @@ Thus, we can just loop through all the numbers, find out where the bit is and se
 
 **How to flip the bits**
 
+All the bits can be initialized to 1 and we need to flip the composite bits to 0 to seive out the composites. In the Sieve of Eratosthenes algorithm, the composites are marked by finding out the multiples of the primes from 2 through `sqrt(N)`. In our algorithm, we don't care about even numbers as they are, for sure, composites. In the implementation, we can set up a mask to flip the even bits to 0 (except 2) in the initialization step. 
+
+
+**Multithreading**
