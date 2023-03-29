@@ -7,7 +7,7 @@
 
 ## Introduction
 This is originally a project for the operating systems class at PSU. This multi-threaded program implements the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) 
-algorithm to find the prime number between 2 and 10240. Instead of using a large interger array to represent the numbers between 2 and 10240, a "bit-array" is used to keep track of the numbers, 
+algorithm to find the prime number between 2 and 10240. Instead of using a large integer array to represent the numbers between 2 and 10240, a "bit-array" is used to keep track of the numbers, 
 in which each bit represents an actual number. Each thread enters the bit array to mask the "composite" bit, which involves the mutual exclusion.
 
 
@@ -28,7 +28,12 @@ Thus, we can just loop through all the numbers, find out where the bit is and se
 
 **How to flip the bits**
 
-All the bits can be initialized to 1 and we need to flip the composite bits to 0 to seive out the composites. In the Sieve of Eratosthenes algorithm, the composites are marked by finding out the multiples of the primes from 2 through `sqrt(N)`. In our algorithm, we don't care about even numbers as they are, for sure, composites. In the implementation, we can set up a mask to flip the even bits to 0 (except 2) in the initialization step. 
+All the bits can be initialized to 1 and we need to flip the composite bits to 0 to seive out the composites. In the Sieve of Eratosthenes algorithm, the composites are marked by finding out the multiples of the primes from 2 through `sqrt(N)`. In our algorithm, we don't care about even numbers as they are, for sure, composites. In the implementation, we can set up a mask to flip the even bits to 0 (except 2) in the initialization step.
+
+Thus, we can just use a counter that traverses thourgh all the odd numbers between 2 and the 10240. Each time when a prime number is found, we can just go ahead and flip the bits that represent its multiples. For example, we know 3 is a prime number. Then we flip the bit for 9 (not 6 because 6 is an even number and therefore has been excluded).
 
 
 **Multithreading**
+
+
+This is a very good example where multlethreading can be applied. We have use many threads and have each thread flip the bits for the multiples of different prime numbers. For example, if we have two threads, we can use one thread to flip the bits for the multiples of 3 and the other to flip the bits for the multiples of 5. 
