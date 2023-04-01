@@ -36,4 +36,40 @@ Thus, we can just use a counter that traverses thourgh all the odd numbers betwe
 **Multithreading**
 
 
-This is a very good example where multlethreading can be applied. We have use many threads and have each thread flip the bits for the multiples of different prime numbers. For example, if we have two threads, we can use one thread to flip the bits for the multiples of 3 and the other to flip the bits for the multiples of 5. 
+This is a very good example where multlethreading can be applied. We can use many threads and have each thread flip the bits for the multiples of different prime numbers. For example, if we have two threads, we can use one thread to flip the bits for the multiples of 3 and the other to flip the bits for the multiples of 5. 
+
+
+Following the logic stated above, we can have a counter, say, a global variable, starts counting from 3 and increments by 2 to traverse all the odd numbers between 2 and 10240 (as discussed, we skip all the even numbers). Each thread that increments the counter will get odd number and then flip the bits for its multiples. However, we cannot have multiple threads entering the counter all together. Therefore, we need to set up a critical region. The pseudo code is as follows.
+
+
+```
+global counter = 1
+...
+def nextOddNumber():
+  mutex lock
+  thread_lock(&lock)
+  counter += 2
+  thread_unlock(&lock)
+  return counter
+```
+
+In this way, each thread gets a unique odd number and it's guarantteed that no odd numbers can be missed.
+
+
+The next question is, how to guaranttee that multiples threads cannot flip the same bit at the same time. An intuition is that a mutex lock need to set. But how? To figure out this question, we need to refer to the pesudo code below.
+
+
+```
+1 def seive():
+2   for(i = nextOddNumber(); i <= sqrt(MAX); i = nextOddNumber())
+3    for(j = i*i; j < MAX; j += i) // find all the multiples of the odd bit
+4      if(j is even number)
+5        continue
+6      flipBit(j)
+```
+
+The answer should be obvious now. We just need to set `line 6` to critical region. 
+
+
+**Review**
+To be updated.
